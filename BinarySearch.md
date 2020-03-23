@@ -45,10 +45,14 @@ public class algorithm {
 1. while循环体中是<=还是<？  
 如果是<的话，证明终止的区间形式是[left, right] (left == right),例如一个数组的元素为：[1,2,3,4,5],
 target元素为2，则循环过程如下：  
-| right | left | middle |
-| 0 | 4 | 2 |
-| 0 | 1 | 0 |
-| 1 | 1 | 1 |  
+
+|left|right|middle|
+|---|---|---|
+|0|4|2|
+|0|1|0|
+|1|1|1|
+
 此时left == right跳出循环，返回值为-1，但是真实值应该为1，所以如果
 没有=的话，要在最后返回值的时候判断区间是否为空  
 `return nums[left] == target ? left : -1;`
+相比之下，如果是<=的话，则在循环终止时的区间为[left, right] (left > right)，此时区间里不可能有任何元素，直接返回-1即可。
