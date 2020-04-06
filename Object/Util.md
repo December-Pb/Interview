@@ -8,11 +8,23 @@
 - character check if it is uppercase: Character.isUpperCase(character)
 - ASCII: lowercase character begin from 97, uppercase character begin from 65,there are 6 special character between lowercase and uppercase.
 
+## List&Array
+- ArrayList<Integer>->int[]:
+  - Solution 1: 循环赋值到int[]中
+  - Solution 2: 用intStream:用以下句子可以实现：
+```java
+int[] array = list.stream().mapToInt(i->i).toArray();
+//or
+int[] array = list.stream().mapToInt(Integer::intValue).toArray();
+//其中list.stream()返回一个Object[]，我们要进一步将其转换成int[]，我们可以用以上两种方法(用到了mapToInt)将integer转换成int
+```
+- [Sream用法](#Stream用法)&[::用法](#::用法)
+
 ## Java Collections下的接口和继承关系简易结构图：
 - Collection Class Diagram
-![Image of Collection Class](https://github.com/December-Pb/Interview/Image/CollectionClass.jpg)
+![Image of Collection Class](https://raw.githubusercontent.com/December-Pb/Interview/master/Image/CollectionClass.jpg)
 - Map Class Diagram
-![Image of Map Class](https://github.com/December-Pb/Interview/Image/MapClass.jpg)
+![Image of Map Class](https://raw.githubusercontent.com/December-Pb/Interview/master/Image/MapClass.jpg)
 
 ## Stack&Queue
 ### Stack的方法
@@ -56,3 +68,175 @@
 1. 需要线程同步，使用Collections工具类中的synchronizedXXX()将不同步的数据结构转换成线程同步
 2. 频繁的插入删除操作，未知初始数据量用LinkedList
 3. 频繁的随机访问操作用ArrayDeque
+
+### 逻辑运算符
+- 异或：a和b两个值不相同，则异或结果为1，如果a和b相同，则异或结果为0
+
+## Java 8新特性
+
+### Stream用法
+
+Java 8添加了新的抽象成为流stream，它类似于SQL从数据库查询数据的方式来提供一种对Java集合运算和表达的高阶抽象，这种风格将要处理的元素看作时流，流在管道中传输，可以在管道的节点进行处理(筛选，排序，聚合)，元素在管道中经过中间操作处理，最终由最终操作得到前面处理的结果
+
+```java
+List<Integer> transactionsIds = 
+widgets.stream()
+             .filter(b -> b.getColor() == RED)
+             .sorted((x,y) -> x.getWeight() - y.getWeight())
+             .mapToInt(Widget::getWeight)
+             .sum();
+```
+
+在Java 8中可以生成串行流(stream())和并行流(parrallelStream())
+### ::用法
+
+::是lambda表达式的一种表达方式，当我们用lambda表达式创建匿名方法时既可以自定义方法也可以调用已有方法，而当调用已有方法的时候我们可以用`::`的方式调用。
+- **调用静态方法**：
+  - **Syntax**:(ClassName::methodeName)
+  - **Example**:SomeClass::someStaticMethod
+- **调用实例方法**：
+  - **Syntax**:(objectOfClass::methodName)
+  - **Example**:System.out::println
+- **父类方法**
+  - **Syntax**:(objectOfClass::methodName)
+  - **Example**:(super::someSuperClassMethod)
+
+```java
+import java.util.*; 
+import java.util.function.*; 
+  
+class Test { 
+  
+    // super function to be called 
+    String print(String str) 
+    { 
+        return ("Hello " + str + "\n"); 
+    } 
+} 
+  
+class SubTest extends Test { 
+  
+    // instance method to override super method 
+    @Override
+    String print(String s) 
+    { 
+  
+        // call the super method 
+        // using double colon operator 
+        Function<String, String> 
+            func = super::print; 
+  
+        String newValue = func.apply(s); 
+        newValue += "Bye " + s + "\n"; 
+        System.out.println(newValue); 
+  
+        return newValue; 
+    } 
+  
+    // Driver code 
+    public static void main(String[] args) 
+    { 
+  
+        List<String> list = new ArrayList<String>(); 
+        list.add("Here"); 
+        list.add("Is"); 
+        list.add("A"); 
+        list.add("TEST"); 
+  
+        // call the instance method 
+        // using double colon operator 
+        list.forEach(new SubTest()::print); 
+    } 
+} 
+```
+
+**Output:**
+```
+Hello Here
+Bye Here
+
+Hello Is
+Bye Is
+
+Hello A
+Bye A
+
+Hello TEST
+Bye TEST
+```
+- **类构造器**
+  - **Syntax**:(ClassName::new)
+  - **Example**:(ArrayList::new)
+
+### Java Functional Interfaces
+
+- 仅仅有一个未实现的interface称为functional interface
+
+    ```java
+    public interface MyFunctionalInterface{
+        public void execute();
+
+        public default void print(String text) {
+            System.out.println(text);
+        }
+
+        public static void print(String text, PrintWriter writer) throws IOException {
+            writer.write(text);
+        }
+    }
+    ```
+
+    以上仍为functional interface，在Java 8中的interface中default和static方法可以实现
+- Function Interface可以有lambda表达式实现
+  
+    ```java
+    MyFunctionalInterface lambda = () -> {
+        System.out.println("Executing...");
+    }
+    ```
+    lambda表达式只能在声明Function Interface的时候使用
+
+- Java内置Function Interface：
+    
+    **Function**:  
+    Function Interface中的Function接受一个参数并且返回一个参数
+
+    ```java
+    public interface Function<T,R> {
+        public <R> apply(T parameter);
+    }
+    ```
+    除了apply方法外，在Function接口中有很多其他的方法，他们都是default方法，但是我们仅需实现apply方法即可
+
+    - e.g
+
+        ```java
+        public class AddThree implements Function<Long, Long> {
+
+            @Override
+            public Long apply(Long aLong) {
+                return aLong + 3;
+            }
+        }
+
+        Function<Long, Long> adder = new AddThree();
+        Long result = adder.apply((long) 4);
+        System.out.println("result = " + result);
+        ```
+        我们还可以用lambda表达式:
+
+    - e.g
+        
+        ```java
+        Function<Long, Long> adder = (value) -> value + 3;
+        Long resultLambda = adder.apply((long) 8);
+        System.out.println("resultLambda = " + resultLambda);
+        ```
+
+        此时Function接口的实现内嵌在了变量的定义中而不是额外声明一个类
+
+    Function接口中还有其他default或者static的方法我们可以选择性的重写：
+
+    - `default <V> Function<V,R> compose(Function<? super V,? extends T> before)`
+    - `default <V> Function<T,V> andThen(Function<? super R,? extends V> after)`
+    - `static <T> Function<T,T> identity()`
