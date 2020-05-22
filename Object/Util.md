@@ -22,9 +22,9 @@ int[] array = list.stream().mapToInt(Integer::intValue).toArray();
 
 ## Java Collections下的接口和继承关系简易结构图：
 - Collection Class Diagram
-![Image of Collection Class](https://raw.githubusercontent.com/December-Pb/Interview/master/Image/CollectionClass.jpg)
+![Image of Collection Class](../Image/CollectionClass.jpg)
 - Map Class Diagram
-![Image of Map Class](https://raw.githubusercontent.com/December-Pb/Interview/master/Image/MapClass.jpg)
+![Image of Map Class](../Image/MapClass.jpg)
 
 ## Stack&Queue
 ### Stack的方法
@@ -240,3 +240,42 @@ Bye TEST
     - `default <V> Function<V,R> compose(Function<? super V,? extends T> before)`
     - `default <V> Function<T,V> andThen(Function<? super R,? extends V> after)`
     - `static <T> Function<T,T> identity()`
+
+### Level Order Traversal
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for(int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                if(node.left != null) {
+                    queue.offer(node.left);
+                }
+                if(node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+        }
+        return result;
+    }
+}
+```
