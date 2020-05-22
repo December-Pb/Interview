@@ -15,7 +15,7 @@ Explanation:
   5     4       <---
 ```
 
-Solution:本题是树的层序遍历的变体，在[层序遍历](../Object/Util.md###Level_Order_Traversal)的同时只需要记录最右侧数值即可
+Solution:本题是树的层序遍历的变体，在[层序遍历](../Object/Util.md###Level Order Traversal)的同时只需要记录最右侧数值即可
 
 ```java
 /**
