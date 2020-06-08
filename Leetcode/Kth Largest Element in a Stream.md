@@ -18,7 +18,7 @@ kthLargest.add(4);   // returns 8
 ```
 
 - Note:
-You may assume that `nums`' length �� `k-1` and `k` �� 1.
+You may assume that `nums`' length <= `k-1` and `k` >= 1.
 
 Solution 1 (TLE)Solution 1 (TLE):维护一个数组和一个priorityqueue，每次都将k-1个元素从队列中弹出，peek第k个元素后再将k-1个元素插回priorityqueue中。
 
