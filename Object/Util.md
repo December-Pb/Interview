@@ -285,3 +285,12 @@ class Solution {
 ```java
 int[][] dirs = {{4, 6}, {6, 8}, {7, 9}, {4, 8}, {0, 3, 9}, {}, {0, 1, 7}, {2, 6}, {1, 9}, {4, 2}};
 ```
+
+
+### Java的多线程
+
+Java中可以用`synchronized`关键字修饰对象或者方法，在用`synchronized`修饰对象时，可以在线程A中调用Object类中的wait方法，调用了wait方法后，该线程由running变成waiting，并且被加入等待队列，当线程B调用notify方法或notifyall时并且释放锁之后，A才有机会从wait状态返回获得锁。[Leetcode 1188](../Leetcode/DesignBoundedBlockingQueue.md)
+
+
+### HashMap中的equals方法  
+其中的equals方法会逐一比较两个map中的元素
